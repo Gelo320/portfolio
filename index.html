@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-fr="Portfolio | Angelo" data-en="Portfolio | Angelo">Portfolio | Angelo </title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+    /* --- VARIABLES CSS & RESET --- */
+    :root {
+        /* DEFAULT THEME (LIGHT MODE/Mode Jour) */
+        --bg-dark: #f0f0f5;
+        --bg-secondary: #ffffff;
+        --text-light: #1c1c1c; 
+        --text-gray: #555555;
+        --accent-color: #ff0077; 
+        --accent-glow: rgba(255, 0, 119, 0.5); 
+        --section-padding: 120px 0;
+        --transition-duration: 0.4s;
+    }
+
+    /* DARK MODE OVERRIDE (Mode Nuit) */
+    body.dark-mode {
+        --bg-dark: #000000;
+        --bg-secondary: #0a0a0a;
+        --text-light: #ffffff; 
+        --text-gray: #b0b0b0;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Space Grotesk', sans-serif;
+        background-color: var(--bg-dark);
+        color: var(--text-light);
+        line-height: 1.6;
+        overflow-x: hidden;
+        transition: background-color 0.5s, color 0.5s;
+    }
+
+    /* --- TYPOGRAPHY & UTILITIES --- */
+    h1, h2, h3 { font-weight: 700; line-height: 1.1; }
+    h2 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 80px; text-align: center; }
+    h2 span { color: var(--accent-color); }
+    a { text-decoration: none; color: inherit; transition: var(--transition-duration); }
+    ul { list-style: none; }
+    img { max-width: 100%; height: auto; display: block; }
+    .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+
+    /* --- BUTTONS & HOVER EFFECTS --- */
+    .btn {
+        display: inline-block;
+        padding: 14px 35px;
+        background-color: var(--accent-color);
+        color: var(--bg-dark);
+        border-radius: 4px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        border: 2px solid var(--accent-color);
+        box-shadow: 0 0 10px rgba(255, 0, 119, 0.3);
+    }
+
+    .btn:hover {
+        background-color: transparent;
+        color: var(--accent-color);
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 30px var(--accent-glow);
+    }
+
+    .btn-outline { background-color: transparent; color: var(--accent-color); }
+    .btn-outline:hover { background-color: var(--accent-color); color: var(--bg-dark); }
+
+    /* --- PARAMÈTRES (Nouveaux boutons de contrôle) --- */
+    .settings-controls { display: flex; gap: 10px; }
+    .control-btn {
+        background: transparent;
+        border: 1px solid var(--text-gray);
+        color: var(--text-light);
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: var(--transition-duration);
+    }
+    .control-btn:hover { color: var(--accent-color); border-color: var(--accent-color); }
+
+    /* --- ANIMATION CLASSES (Scroll Reveal) --- */
+    .hidden-section {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 1s cubic-bezier(0.17, 0.55, 0.55, 1);
+    }
+
+    .show-section {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .show-section[style*="delay"] { transition-delay: var(--delay); }
+
+    /* --- HEADER & NAVIGATION --- */
+    header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        padding: 20px 0;
+        z-index: 1000;
+        background: var(--bg-secondary);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--text-gray);
+        transition: background-color 0.5s;
+    }
+
+    body.dark-mode header {
+        background: rgba(0, 0, 0, 0.9);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    nav { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.8rem; font-weight: 700; }
+    .logo span { color: var(--accent-color); }
+
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { font-weight: 400; font-size: 1rem; }
+    .nav-links a:hover, .nav-links a.active { 
+        color: var(--accent-color); 
+        transform: scale(1.05); 
+    }
+    .hamburger { display: none; cursor: pointer; font-size: 1.5rem; }
+
+    /* --- HERO SECTION (Split Layout) --- */
+    #hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        background: radial-gradient(circle at 10% 90%, var(--bg-secondary) 0%, var(--bg-dark) 50%);
+        padding-top: 80px;
+    }
+    body.dark-mode #hero {
+        background: radial-gradient(circle at 10% 90%, #150020 0%, var(--bg-dark) 50%);
+    }
+
+    .hero-content {
+        max-width: 100%;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 50px;
+    }
+    .hero-text-col { flex: 1.5; max-width: 600px; }
+    .hero-image-col { flex: 1; display: flex; justify-content: flex-end; }
+
+    .hero-image-col img {
+        width: 100%; max-width: 400px; height: auto; object-fit: cover;
+        border-radius: 8px; border: 4px solid var(--accent-color);
+        box-shadow: 0 0 30px var(--accent-glow); transition: 0.5s;
+    }
+    .hero-image-col img:hover { transform: translateY(-5px); box-shadow: 0 0 40px var(--accent-glow); }
+    .hero-subtitle { 
+        color: var(--accent-color); font-weight: 700; margin-bottom: 1rem; display: block; 
+        letter-spacing: 2px; font-size: 1.2rem;
+    }
+    #hero h1 { font-size: clamp(3rem, 8vw, 4rem); margin-bottom: 1.5rem; color: var(--text-light); }
+    #hero h1 span { color: var(--accent-color); text-shadow: 0 0 25px var(--accent-glow); }
+    .hero-p { color: var(--text-gray); margin-bottom: 3rem; font-size: 1.2rem; }
+    .hero-buttons { display: flex; gap: 1.5rem; }
+
+
+    /* --- ABOUT SECTION --- */
+    #about { padding: var(--section-padding); background-color: var(--bg-secondary); }
+    .about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 50px; align-items: center; }
+    .about-img {
+        border-radius: 8px; overflow: hidden; border: 4px solid var(--accent-color);
+        box-shadow: 0 0 30px var(--accent-glow); transition: var(--transition-duration);
+    }
+    .about-img:hover { transform: scale(1.05); box-shadow: 0 0 50px var(--accent-glow); }
+    .about-text h3 { font-size: 2rem; margin-bottom: 20px; }
+    .about-text p { color: var(--text-gray); margin-bottom: 25px; }
+    
+    .tools-list { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+    
+    /* 🛠️ CORRECTION POUR LE MODE CLAIR (Style par défaut) 🛠️ */
+    .tool-tag {
+        padding: 8px 15px; 
+        /* Fond clair pour le mode jour */
+        background: var(--bg-dark); 
+        /* Texte sombre pour le mode jour (var(--text-light) = #1c1c1c) */
+        color: var(--text-light);
+        /* Bordure subtile */
+        border: 1px solid var(--text-gray); 
+        border-radius: 4px;
+        font-size: 0.9rem; 
+        transition: 0.3s;
+    }
+    
+    /* 🌙 SURCHARGE POUR LE MODE SOMBRE */
+    body.dark-mode .tool-tag {
+        /* Fond sombre pour le mode nuit */
+        background: #1e1e1e;
+        /* Texte clair pour le mode nuit (var(--text-light) = #ffffff) */
+        color: var(--text-light);
+        /* Bordure accentuée */
+        border-color: var(--accent-color);
+    }
+    /* --- ÉDUCATION SECTION --- */
+    #education { 
+        padding: var(--section-padding) 0; 
+        background-color: var(--bg-dark); 
+    }
+    
+    body.dark-mode #education {
+        background-color: var(--bg-dark); 
+    }
+    /* --- EXPERIENCE / TIMELINE --- */
+    #experience { padding: var(--section-padding) 0; }
+    .experience-timeline {
+        max-width: 800px; margin: 0 auto; padding-left: 20px;
+        border-left: 3px solid var(--text-gray);
+    }
+    body.dark-mode .experience-timeline {
+        border-left: 3px solid var(--bg-secondary);
+    }
+
+    .timeline-item { position: relative; margin-bottom: 50px; padding-left: 30px; }
+    .timeline-item::before {
+        content: ''; position: absolute; left: -20px; top: 5px;
+        width: 15px; height: 15px; background: var(--accent-color);
+        border-radius: 50%; box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .timeline-item h3 { font-size: 1.8rem; color: var(--text-light); margin-bottom: 5px; }
+    .timeline-item .duration {
+        display: block; color: var(--accent-color); font-size: 0.9rem; margin-bottom: 10px; font-weight: 700;
+    }
+    .timeline-item .company { color: var(--text-gray); font-style: italic; margin-bottom: 15px; }
+    .timeline-item ul li { margin-bottom: 5px; color: var(--text-gray); }
+
+    /* --- PORTFOLIO SECTION (GLOW EFFECT) --- */
+    #portfolio { padding: var(--section-padding) 0; background-color: var(--bg-secondary); }
+    .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+    .project-card {
+        background-color: var(--bg-dark);
+        border-radius: 10px; overflow: hidden; transition: all 0.5s ease;
+        border: 1px solid var(--text-gray); box-shadow: 0 5px 20px rgba(0,0,0,0.1); 
+    }
+    body.dark-mode .project-card {
+        background-color: var(--bg-secondary);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .project-card:hover {
+        transform: perspective(1000px) rotateY(2deg) scale(1.05);
+        border-color: var(--accent-color); box-shadow: 0 15px 40px var(--accent-glow); z-index: 10;
+    }
+
+    .project-img { height: 250px; overflow: hidden; }
+    .project-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+    .project-card:hover .project-img img { transform: scale(1.1); filter: brightness(1.1); }
+    .project-info { padding: 25px; }
+    .project-info h3 { margin-bottom: 8px; font-size: 1.5rem;}
+    .project-info p { color: var(--text-gray); margin-bottom: 20px; }
+    .project-links a { margin-right: 20px; font-size: 1.2rem;}
+    .project-links a:hover { color: var(--accent-color); text-shadow: 0 0 10px var(--accent-glow); }
+
+
+    /* --- CONTACT SECTION & FOOTER --- */
+    #contact { padding: var(--section-padding) 0; background-color: var(--bg-dark); text-align: center; }
+    .social-links { display: flex; justify-content: center; gap: 30px; margin-top: 50px; font-size: 2.5rem; }
+    .social-links a:hover { 
+        color: var(--accent-color); transform: translateY(-5px) scale(1.1); 
+        text-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    footer {
+        padding: 30px 0; text-align: center; background: var(--bg-secondary);
+        color: var(--text-gray); font-size: 0.9rem; border-top: 1px solid var(--text-gray);
+    }
+    body.dark-mode footer {
+        background: var(--bg-dark);
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* --- RESPONSIVE MOBILE --- */
+    @media (max-width: 900px) {
+        .nav-links {
+            position: fixed; top: 70px; right: -100%; height: 100vh; width: 70%;
+            background-color: var(--bg-secondary); flex-direction: column; 
+            align-items: center; justify-content: center; transition: 0.4s ease-in-out;
+            border-left: 1px solid var(--text-gray);
+        }
+        body.dark-mode .nav-links { border-left: 1px solid rgba(255,255,255,0.1); }
+        .nav-links.active { right: 0; }
+        .hamburger { display: block; }
+        
+        .hero-content { flex-direction: column; text-align: center; }
+        .hero-image-col { order: -1; justify-content: center; margin-bottom: 30px; }
+        .hero-text-col { max-width: 100%; }
+        .hero-buttons { flex-direction: column; gap: 1rem; align-items: center;}
+        
+        .about-grid { grid-template-columns: 1fr; text-align: center; }
+        .about-img { margin-bottom: 30px; }
+        .tools-list { justify-content: center; }
+    }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Mikola<span>.</span></div>
+                <ul class="nav-links" id="main-nav">
+                    </ul>
+                
+                <div class="settings-controls">
+                    <button id="theme-toggle" class="control-btn" aria-label="Toggle theme">
+                        <i class="fas fa-sun"></i> 
+                    </button>
+                    <button id="lang-toggle" class="control-btn" aria-label="Toggle language">
+                        FR
+                    </button>
+                </div>
+
+                <div class="hamburger"><i class="fas fa-bars"></i></div>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero">
+        <div class="container hidden-section">
+            <div class="hero-content">
+                
+                <div class="hero-text-col hidden-section" style="--delay: 0s;">
+                    <span class="hero-subtitle" data-fr="Designer Graphique & UI/UX" data-en="Graphic Designer & UI/UX">
+                        Designer Graphique & UI/UX
+                    </span>
+                    <h1 data-fr-main="Je m'appelle" data-en-main="I create" data-fr-span="Rajaonambinina Angelo." data-en-span="Unforgettable Visual Experiences.">
+                        Je m'appelle <br><span class="translatable-span">Rajaonambinina Angelo.</span>
+                    </h1>
+                    <p class="hero-p" data-fr="Du branding minimaliste au  design audacieux, je traduis la vision de mes clients en concepts graphiques percutants et efficaces." data-en="From minimalist branding to bold motion design, I translate my clients' vision into striking and effective graphic concepts.">
+                        Du branding minimaliste au motion design audacieux, je traduis la vision de mes clients en concepts graphiques percutants et efficaces.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#portfolio" class="btn" data-fr="Explorer mon travail" data-en="Explore My Work">Explorer mon travail</a>
+                        <a href="#contact" class="btn btn-outline" data-fr="Démarrer un projet" data-en="Start a Project">Démarrer un projet</a>
+                    </div>
+                </div>
+
+                <div class="hero-image-col hidden-section" style="--delay: 0.3s;">
+<img src="./img/received_1524267241762535.jpeg" alt="photodeprofil"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <section id="about" class="hidden-section">
+            <div class="container">
+                <h2 data-fr="Mes Compétences" data-en="My Skills">Mes <span>Compétences</span></h2>
+                <div class="about-grid">
+                    <div class="about-img">
+                        <img src="./img/pdp.jpeg" alt="portrait-graphiste">
+                    </div>
+                    <div class="about-text">
+                        <h3 data-fr="Une fusion de créativité et de technique." data-en="A fusion of creativity and technique.">Une fusion de créativité et de technique.</h3>
+                        <p data-fr="Un jeune passionné par la multimédia, j'ai développé une expertise solide dans l'ensemble du processus de création : de la conceptualisation à la livraison finale des fichiers prêts pour le web ou l'impression." data-en="A young person passionate about multimedia, I have developed solid expertise in the entire creation process: from conceptualization to the final delivery of files ready for web or print.">
+                            Un jeune passionné par la multimédia, j'ai développé une expertise solide dans l'ensemble du processus de création : de la conceptualisation à la livraison finale des fichiers prêts pour le web ou l'impression.
+                        </p>
+                        <div class="tools-list">
+                            <span class="tool-tag">Adobe Illustrator</span>
+                            <span class="tool-tag">Figma / Adobe XD</span>
+                            <span class="tool-tag">Canva</span>
+                            <span class="tool-tag">Photoshop</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    <section id="education">
+        <div class="container hidden-section">
+            <h2 data-fr="Mon Parcours Universitaire" data-en="My Academic Journey">Mon <span>Parcours</span> Universitaire</h2>
+            
+            <div class="experience-timeline">
+                
+                <div class="timeline-item hidden-section" style="--delay: 0s;">
+                    <h3 data-fr="Troisième Année de Licence " data-en="Bachelor in Communication and Multimedia">Troisième Année de Licence</h3>
+                    <span class="duration" data-fr="2025 - Actuel " data-en="2025 - Present">2025 - Actuel </span>
+                    <span class="company" data-fr="ICM, Fianarantsoa" data-en="ICM, Fianarantsoa">ICM, Fianarantsoa</span>
+                    <ul>
+                        <li data-fr="Filière Information, Communication et Multimédia
+                        Parcours Communication et Multimédia" data-en="Information, Communication and Multimedia Major. 
+                        Communication and Multimedia Program">
+                            Acquisition des fondamentaux en théorie de la communication et gestion de projets digitaux.
+                        </li>
+                        <li data-fr="Focus sur l'intégration des outils numériques (Design, Audiovisuel) et les stratégies web." data-en="Focus on the integration of digital tools (Design, Audiovisual) and web strategies.">
+                            Focus sur l'intégration des outils numériques (Design, Audiovisuel) et les stratégies web.
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item hidden-section" style="--delay: 0.3s;">
+                    <h3 data-fr="Baccalauréat Série A1" data-en="Scientific Baccalaureate (Series A1)">Baccalauréat Série A1</h3>
+                    <span class="duration" data-fr="2023" data-en="2023">2023</span>
+                    <span class="company" data-fr="Lycée Catholique Lucien Botovasoa, Vangaindrano" data-en="Lucien Botovasoa Catholic High School, Vangaindrano">Lycée Catholique Lucien Botovasoa, Vangaindrano</span>
+                    <ul>
+                        <li data-fr="Obtention du diplôme marquant le début des études supérieures." data-en="Obtained diploma marking the start of higher education.">
+                            Obtention du diplôme marquant le début des études supérieures.
+                        </li>
+                    </ul>
+                </div>
+    
+            </div>
+        </div>
+    </section>
+    <section id="experience">
+        <div class="container hidden-section">
+            <h2 data-fr="Mon Parcours Professionnel" data-en="My Professional Journey">Mon <span>Parcours</span> Professionnel</h2>
+            
+            <div class="experience-timeline">
+                
+                <div class="timeline-item hidden-section" style="--delay: 0s;">
+                    <h3 data-fr="Responsable Multimedia" data-en="Multimedia Manager">Responsable Multimedia</h3>
+                    <span class="duration" data-fr="Aout 2025 - Aujourd'hui" data-en="August 2025 - Present">Aout 2025 - Aujourd'hui</span>
+                    <span class="company" data-fr="Youth Computing, Fianarantsoa" data-en="Youth Computing, Fianarantsoa">Youth Computing, Fianarantsoa</span>
+                    <ul class="translated-list" data-fr-items="Superviser la création de contenus visuels, interactifs et audiovisuels.Vérifier la cohérence graphique et éditoriale des supports." data-en-items="Supervise the creation of visual, interactive, and audiovisual content. Ensure the graphic and editorial consistency of the materials">
+                        <li>Direction artistique et exécution de projets de branding.</li>
+                        <li>Création de contenu pour le Motion Design.</li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item hidden-section" style="--delay: 0.3s;">
+                    <h3 data-fr="Stagiaire en Design Graphic" data-en="Graphic Design Intern">Stagiaire en Design Graphic</h3>
+                    <span class="duration" data-fr="Mai 2025 - Aout 2025" data-en="May 2025 - August 2025">Mai 2025 - Aout 2025</span>
+                    <span class="company" data-fr="Youth Computing, Fianarantsoa" data-en="Youth Computing, Fianarantsoa">Youth Computing, Fianarantsoa</span>
+                     <ul class="translated-list" data-fr-items="Réaliser des affiches, flyers, brochures, bannières web, posts pour réseaux sociaux. Adapter des visuels existants aux différents formats de communication." data-en-items="esign posters, flyers, brochures, web banners, and social media posts. Adapt existing visuals to different communication formats">
+                        <li>Conception de supports print et web.</li>
+                        <li>Gestion de la librairie de composants graphiques.</li>
+                    </ul>
+                </div>
+                <div class="timeline-item hidden-section" style="--delay: 0s;">
+                    <h3 data-fr="Graphiste Freelance" data-en="Independent Graphic Designer">Graphiste Freelance</h3>
+                    <span class="duration" data-fr="Mars 2024 - Aujourd'hui" data-en="March 2024 - Present">Mars 2024 - Aujourd'hui</span>
+                    <span class="company" data-fr="Kola, Fianarantsoa" data-en="Kola, Fianarantsoa">Kola, Fianarantsoa</span>
+                    <ul class="translated-list" data-fr-items="Création visuelle : concevoir des logos, affiches, flyers, brochures, bannières web, visuels publicitaires, illustrations ou packaging. Communication de marque : traduire les idées et messages d’un client en supports visuels clairs et percutants. Supports variés : travailler aussi bien sur des projets imprimés (presse, édition, PLV) que numériques (sites web, réseaux sociaux, applications)." data-en-items="Visual creation: designing logos, posters, flyers, brochures, web banners, advertising visuals, illustrations, or packaging.
+
+                    Brand communication: translating a client’s ideas and messages into clear and impactful visual materials.
+                    
+                    Varied media: working on both print projects (press, publishing, point-of-sale displays) and digital ones (websites, social media, applications).">
+                        <li>Direction artistique et exécution de projets de branding.</li>
+                        <li>Création de contenu pour le Motion Design.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio">
+        <div class="container">
+            <h2 class="hidden-section" data-fr="Projets Récents" data-en="Recent Projects">Projets <span>Récents</span></h2>
+            <div class="portfolio-grid">
+                
+                <div class="project-card hidden-section" style="--delay: 0s;">
+                    <div class="project-img">
+                        <img src="img/resultats-Récupéré.jpg" alt="Projets Social Media">
+                    </div>
+                    <div class="project-info">
+                        <h3 data-fr="Design pour Reseaux Sociaux" data-en="Media Social Design">Design pour Reseaux Sociaux</h3>
+                        <p data-fr=" Conception complete d'un flyers pour un publication sur Facebook." data-en="Full flyer design for Facebook promotion.">
+                            Conception complete d'un flyers pour un publication sur Facebook.
+                        </p>
+                        <div class="project-links">
+                            <a href="./img/resultats-Récupéré.jpg" data-fr="Voir le cas" data-en="View Case"><i class="fas fa-eye"></i> Voir le cas</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card hidden-section" style="--delay: 0s;">
+                    <div class="project-img">
+                        <img src="./img/Booking Chrijese (2).jpg" alt="Projets Social Media">
+                    </div>
+                    <div class="project-info">
+                        <h3 data-fr="Design pour Reseaux Sociaux" data-en="Media Social Design">Design pour Reseaux Sociaux</h3>
+                        <p data-fr=" Conception complete d'un booking info pour un publication sur Facebook." data-en="Full booking design  for Facebook promotion.">
+                            Conception complete d'un booking info pour un publication sur Facebook.
+                        </p>
+                        <div class="project-links">
+                            <a href="./img/Booking Chrijese (2).jpg" data-fr="Voir le cas" data-en="View Case"> Voir le cas</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card hidden-section" style="--delay: 0s;">
+                    <div class="project-img">
+                        <img src="./img/NWBpYwNVWmK.png" alt="Projets Packaging">
+                    </div>
+                    <div class="project-info">
+                        <h3 data-fr="Packaging" data-en="Packaging">Packaging</h3>
+                        <p data-fr=" Conception d’un tote bag" data-en="Designing a tote bag">
+                            Conception d’un tote bag
+                        </p>
+                        <div class="project-links">
+                            <a href="./img/NWBpYwNVWmK.png" data-fr="Voir le cas" data-en="View Case"><i class="fas fa-eye"></i> Voir le cas</a>
+                        </div>
+                    </div>
+                </div>
+                 
+                <div class="project-card hidden-section" style="--delay: 0.2s;">
+                    <div class="project-img">
+                        <img src="./img/Portfolio Elisah.PNG" alt="picture-portfolio">
+                    </div>
+                    <div class="project-info">
+                        <h3 data-fr="Developpement Web - Portfolio" data-en="Web Development - Portfolio">Developpement Web - Portfolio</h3>
+                        <p data-fr="Réalisation Front-End : développement des interfaces web responsives." data-en="Front-End development of a web application: responsive and interactive interfaces.">
+                            Réalisation Front-End : développement des interfaces web responsives.
+                        </p>
+                        <div class="project-links">
+                            <a href="https://gelo320.github.io/elisahportfolio/" data-fr="Lien Github" data-en="Github Link"><i class="fab fa-github"></i> Lien Github</a>
+                        </div>
+                    </div>
+                </div><div class="project-card hidden-section" style="--delay: 0.2s;">
+                    <div class="project-img">
+                        <img src="./img/Domus.PNG" alt="picture-domus">
+                    </div>
+                    <div class="project-info">
+                        <h3 data-fr="Application Gestion des taches menagers" data-en="Home Chores Management App">Application Gestion des taches menagers</h3>
+                        <p data-fr="Réalisation Front-End : développement des interfaces web responsives." data-en="Front-End development of a web application: responsive and interactive interfaces.">
+                            Réalisation Front-End : développement des interfaces web responsives.
+                        </p>
+                        <div class="project-links">
+                            <a href="https://gelo320.github.io/iza/" data-fr="Lien Github" data-en="Github Link"><i class="fab fa-github"></i> Lien Github</a>
+                        </div>
+                    </div>
+                </div>
+                 
+                 <div class="project-card hidden-section" style="--delay: 0.4s;">
+                    <div class="project-img">
+                        <img src="./img/flyers Y2CP.jpg" alt="Projet Print Design">
+                    </div>
+                    <div class="project-info">
+                        <h3 data-fr="Design imprimé" data-en="Print Design">Design imprimé</h3>
+                        <p data-fr="Conception graphique pour un artiste local : création de visuels adaptés à son identité et à sa communication (affiches, flyers, pochettes, publications digitales)." data-en="Graphic design for a local artist: creating visuals that reflect their identity and communication (posters, flyers, covers, digital posts).">
+                            Conception graphique pour un artiste local : création de visuels adaptés à son identité et à sa communication (affiches, flyers, pochettes, publications digitales).
+                        </p>
+                        <div class="project-links">
+                            <a href="./img/flyers Y2CP.jpg" data-fr="Voir le cas" data-en="View Case"><i class="fab fa-facebook"></i> Sur Facebook</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container hidden-section">
+            <h2 data-fr="Prêt à Collaborer ?" data-en="Ready to Collaborate?">Prêt à <span>Collaborer</span> ?</h2>
+            <p data-fr="Chaque grand projet commence par une conversation. Envoyez-moi un message !" data-en="Every great project starts with a conversation. Send me a message!">
+                Chaque grand projet commence par une conversation. Envoyez-moi un message !
+            </p>
+            <a href="mailto:lorenzoraj50@gmail.com" class="btn" data-fr="Envoyer un Email" data-en="Send an Email">Envoyer un Email</a>
+            
+            <div class="social-links">
+                <a href="https://www.facebook.com/gelo.bear04/" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="https://wa.me/261381087969" aria-label="Whatsapp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p data-fr="© 2025 - Mikola." data-en="© 2025 - Mikola.">© 2025 - Mikola.</p>
+    </footer>
+
+    <script>
+        // --- LOGIQUE DE GESTION DU SITE (Mode, Langue, Animations) ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Définition des éléments de contrôle
+            const themeToggle = document.getElementById('theme-toggle');
+            const langToggle = document.getElementById('lang-toggle');
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const links = document.querySelectorAll('.nav-links li a');
+
+           // 2. Définition des données de traduction (pour la navigation)
+const navLinksData = [
+    { fr: 'Accueil', en: 'Home', href: '#hero' },
+    { fr: 'Compétences', en: 'Skills', href: '#about' },
+    // NOUVELLE ENTRÉE ICI
+    { fr: 'Formation', en: 'Education', href: '#education' }, 
+    // FIN NOUVELLE ENTRÉE
+    { fr: 'Expériences', en: 'Experience', href: '#experience' },
+    { fr: 'Projets', en: 'Projects', href: '#portfolio' },
+    { fr: 'Contact', en: 'Contact', href: '#contact' }
+];
+
+            // 3. Initialisation des paramètres (Thème & Langue)
+            
+            // a. Gérer le thème (Chargement initial)
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            if (currentTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+
+            // b. Gérer la langue (Chargement initial)
+            let currentLang = localStorage.getItem('lang') || 'fr';
+            if (langToggle) langToggle.textContent = currentLang.toUpperCase();
+            updateContent(currentLang);
+
+
+            // 4. Gestion des événements
+            
+            // Toggle Mode Jour/Nuit
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const isDarkMode = document.body.classList.toggle('dark-mode');
+                    
+                    if (isDarkMode) {
+                        localStorage.setItem('theme', 'dark');
+                        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    } else {
+                        localStorage.setItem('theme', 'light');
+                        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    }
+                });
+            }
+
+            // Toggle Langue (FR/EN)
+            if (langToggle) {
+                langToggle.addEventListener('click', () => {
+                    currentLang = currentLang === 'fr' ? 'en' : 'fr';
+                    localStorage.setItem('lang', currentLang);
+                    langToggle.textContent = currentLang.toUpperCase();
+                    updateContent(currentLang);
+                });
+            }
+
+            // Menu Hamburger
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                    hamburger.innerHTML = navLinks.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                });
+            }
+
+            // Fermer le menu mobile lors du clic sur un lien
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                        hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                });
+            });
+
+
+            // 5. Scroll Reveal Animations
+            const observerOptions = { threshold: 0.2 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show-section');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            const hiddenSections = document.querySelectorAll('.hidden-section');
+            hiddenSections.forEach((el) => {
+                const delay = el.style.getPropertyValue('--delay');
+                if (delay) {
+                    el.style.setProperty('--delay', delay);
+                }
+                observer.observe(el);
+            });
+
+
+            // 6. Logique de Traduction
+            function updateContent(lang) {
+                
+                // a. Traduire et reconstruire la Navigation
+                const mainNav = document.getElementById('main-nav');
+                if (mainNav) {
+                    mainNav.innerHTML = navLinksData.map(item => {
+                        const text = item[lang];
+                        // Pas besoin de classe 'active' complexe pour le single-page, juste des ancres
+                        return `<li><a href="${item.href}">${text}</a></li>`;
+                    }).join('');
+                }
+
+                // b. Traduire le contenu simple (data-fr/data-en)
+                document.querySelectorAll('[data-fr]').forEach(element => {
+                    element.textContent = element.getAttribute(`data-${lang}`);
+                });
+                
+                // c. Gérer le Titre H1 (pour séparer le <span> coloré)
+                const h1Main = document.querySelector('h1[data-fr-main]');
+                if (h1Main) {
+                    const newSpan = document.createElement('span');
+                    newSpan.className = 'translatable-span'; 
+                    newSpan.textContent = h1Main.getAttribute(`data-${lang}-span`);
+
+                    h1Main.innerHTML = h1Main.getAttribute(`data-${lang}-main`) + ' <br>';
+                    h1Main.appendChild(newSpan);
+                }
+
+                // d. Gérer les listes (ul) d'Expérience (car elles ne peuvent pas utiliser textContent)
+                document.querySelectorAll('.translated-list').forEach(ul => {
+                    const itemsText = ul.getAttribute(`data-${lang}-items`);
+                    if (itemsText) {
+                        ul.innerHTML = itemsText.split(';').map(item => `<li>${item}</li>`).join('');
+                    }
+                });
+                
+            }
+        });
+    </script>
+</body>
+</html>
